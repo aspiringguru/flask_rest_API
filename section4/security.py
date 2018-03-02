@@ -1,38 +1,24 @@
-#from user import User
+from werkzeug.security import safe_str_cmp
+from user import User
+users = [    User(1, 'bob', 'asdf') ]
 
-users = [
-    {
-        'id': 1,
-        'username': 'bob',
-        'password': 'asdf'
-    }
-]
+username_mapping = { u.username: u for u in users }
+userid_mapping = { u.id: u for u in users }
 
-username_mapping = {
-    'bob':{
-        'id': 1,
-        'username': 'bob',
-        'password': 'asdf'
-    }
-}
 
-userid_mapping = {
-    1:{
-        'id': 1,
-        'username': 'bob',
-        'password': 'asdf'
-    }
-}
 
 def authenticate(username, password):
     user = username_mapping.get(username, None)
     #dictionary.get method, sets default to None if key requested is absent.
-    if user and user.password == password:
+    #if user and user.password == password:
+    if user and safe_str_cmp(user.password, password):
+        #safe_str_cmp handles different string encodings safely.
         return user
 
 def identity(payload):
     user_id = payload['identity']
     return userid_mapping.get(userid, None)
+
 
 
 
