@@ -2,7 +2,10 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 
 app = Flask(__name__)
+app.secret_key = "alpha beta epsilon"
+#nb: secret key should be imported from a file excluded from the git repo
 api = Api(app)
+
 
 items = []
 
