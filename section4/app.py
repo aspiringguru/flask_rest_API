@@ -8,13 +8,19 @@ items = []
 
 class Item(Resource):
     def get(self, name):
-        for item in items:
-            if item['name'] == name:
-                return {"name": name, "price": item['price']}
-        return {"error": "item " + name + " not found."}, 404
-        # ,404 after the json is interpreted by browser as http response code
+        item = next(filter(lambda x: x['name'] == name, items), None)
+        #https://docs.python.org/2/library/functions.html
+        #filter(function, iterable) returns iterator?
+        #next(iterator[, default]), nb: , default @ end is returned if iterable is empty.
+        return {"item": item}, 200 if item else 404
+        # digits after the json is interpreted by browser as http response code
+        #nb: if x evaluates to true if x is not None, evaluates to false if x == None
 
     def post(self, name):
+        #now impose unique name on adding/creating new item.
+        if next(filter(lambda x: x['name'] == name, items), None) is not None:
+            return {'message':"An item with name '{}' already exists".format(name)}, 400
+
         data = request.get_json()
         #NB: this requires the content-type to be set to application/json and body to be json in the post request, o/wise error.
         item = {'name': name, 'price': data['price']}
