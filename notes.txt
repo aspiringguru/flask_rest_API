@@ -13,8 +13,10 @@ ssh -i /c/Users/bmt/.ssh/aws-key.pem  ubuntu@ec2-54-190-59-140.us-west-2.compute
 in directory /home/ubuntu/udemy_rest_api_working/ch4/code
 source ../venv/bin/activate
 
+pip install Flask
+pip install Flask-RESTful
 pip install Flask-JWT
-(json web tool)
+
 
 
 
