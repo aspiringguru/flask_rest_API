@@ -17,6 +17,12 @@ jst = JWT(app, authenticate, identity)   # /auth
 items = []
 
 class Item(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('price',
+        type = float,
+        required = True,
+        help = "This field cannot be left blank!"
+    )
 
     #@jwt_required() #when this route is in front of a method definition, the method requires authorisation to execute
     def get(self, name):
@@ -33,8 +39,10 @@ class Item(Resource):
         #now impose unique name on adding/creating new item.
         if next(filter(lambda x: x['name'] == name, items), None) is not None:
             return {'message':"An item with name '{}' already exists".format(name)}, 400
+        #by using an error first approach, the code below is not executed if error condition found.
 
-        data = request.get_json()
+        data = Item.parser.parse_args()
+        #data = request.get_json() #ssd
         #NB: this requires the content-type to be set to application/json and body to be json in the post request, o/wise error.
         item = {'name': name, 'price': data['price']}
         items.append(item)
@@ -51,7 +59,11 @@ class Item(Resource):
 
     #@jwt_required() #future implementation of login to put
     def put(self, name):
-        data = request.get_json()
+        #todo: replicate this in other methods.
+        data = Item.parser.parse_args()
+        #print (data['another']) #results in keyerror when tested in postman
+
+        #data = request.get_json()
         item = next(filter(lambda x: x['name'] == name, items), None)
         if item is None:
             item = {'name':name, 'price': data['price']}
