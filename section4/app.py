@@ -1,7 +1,10 @@
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
 from security import authenticate, identity
+
+#https://flask-restful.readthedocs.io/en/0.3.5/reqparse.html
+
 
 
 app = Flask(__name__)
@@ -14,7 +17,8 @@ jst = JWT(app, authenticate, identity)   # /auth
 items = []
 
 class Item(Resource):
-    @jwt_required()
+
+    #@jwt_required() #when this route is in front of a method definition, the method requires authorisation to execute
     def get(self, name):
         item = next(filter(lambda x: x['name'] == name, items), None)
         #https://docs.python.org/2/library/functions.html
@@ -24,6 +28,7 @@ class Item(Resource):
         # digits after the json is interpreted by browser as http response code
         #nb: if x evaluates to true if x is not None, evaluates to false if x == None
 
+    #@jwt_required() #future implementation of login to post
     def post(self, name):
         #now impose unique name on adding/creating new item.
         if next(filter(lambda x: x['name'] == name, items), None) is not None:
@@ -35,13 +40,26 @@ class Item(Resource):
         items.append(item)
         return item, 201
 
+    #@jwt_required() #future implementation of login to delete
     def delete(self, name):
+        #todo: upgrade to return err msg if item does not exist to delete. curr version does not check
         global items
         #tells this method the items generated is the global var items
         items = list(filter(lambda x: x['name'] != name, items))
         #overwrite list items with list where name has been removed.
         return {'message': 'item deleted'}
 
+    #@jwt_required() #future implementation of login to put
+    def put(self, name):
+        data = request.get_json()
+        item = next(filter(lambda x: x['name'] == name, items), None)
+        if item is None:
+            item = {'name':name, 'price': data['price']}
+            items.append(item)
+        else:
+            item.update(data)
+            #nb: data might contain a new name, bad, need to protect against this later
+        return item
 
 api.add_resource(Item, "/item/<string:name>")
 
@@ -61,4 +79,3 @@ api.add_resource(Home, "/")
 #test
 
 app.run(debug=True, port=5000, host='0.0.0.0')
-
