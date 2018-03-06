@@ -12,6 +12,7 @@ def authenticate(username, password):
         #safe_str_cmp handles different string encodings safely.
         #jwt token returned
         return user
+    return {"message": "no user found in security.authenticate"}
 
 def identity(payload):
     userid = payload['identity']
