@@ -2,13 +2,16 @@ from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
 from security import authenticate, identity
+from user import UserRegister
+
 
 #https://flask-restful.readthedocs.io/en/0.3.5/reqparse.html
 
 
 
 app = Flask(__name__)
-app.secret_key = "asdf"
+app.config['PROPAGATE_EXCEPTIONS'] = True # To allow flask propagating exception even if debug is set to false on app
+app.secret_key = 'jose'
 #nb: secret key should be imported from a file excluded from the git repo
 api = Api(app)
 
@@ -24,7 +27,7 @@ class Item(Resource):
         help = "This field cannot be left blank!"
     )
 
-    #@jwt_required() #when this route is in front of a method definition, the method requires authorisation to execute
+    @jwt_required() #when this route is in front of a method definition, the method requires authorisation to execute
     def get(self, name):
         item = next(filter(lambda x: x['name'] == name, items), None)
         #https://docs.python.org/2/library/functions.html
@@ -48,7 +51,7 @@ class Item(Resource):
         items.append(item)
         return item, 201
 
-    #@jwt_required() #future implementation of login to delete
+    @jwt_required() #future implementation of login to delete
     def delete(self, name):
         #todo: upgrade to return err msg if item does not exist to delete. curr version does not check
         global items
@@ -57,7 +60,7 @@ class Item(Resource):
         #overwrite list items with list where name has been removed.
         return {'message': 'item deleted'}
 
-    #@jwt_required() #future implementation of login to put
+    @jwt_required() #future implementation of login to put
     def put(self, name):
         #todo: replicate this in other methods.
         data = Item.parser.parse_args()
@@ -88,6 +91,7 @@ class Home(Resource):
         return{"message": "Connected"}
 
 api.add_resource(Home, "/")
+api.add_resource(UserRegister, "/register")
 #test
 
 app.run(debug=True, port=5000, host='0.0.0.0')

@@ -1,20 +1,19 @@
 from werkzeug.security import safe_str_cmp
 from user import User
-users = [    User(1, 'bob', 'asdf') ]
 
-username_mapping = { u.username: u for u in users }
-userid_mapping = { u.id: u for u in users }
-
-
+#deleted previous static list object since now using sqlite database.
 
 def authenticate(username, password):
-    user = username_mapping.get(username, None)
+    #user = username_mapping.get(username, None)
+    user = User.find_by_username(username)
     #dictionary.get method, sets default to None if key requested is absent.
     #if user and user.password == password:
     if user and safe_str_cmp(user.password, password):
         #safe_str_cmp handles different string encodings safely.
+        #jwt token returned
         return user
 
 def identity(payload):
     userid = payload['identity']
-    return userid_mapping.get(userid, None)
+    #return userid_mapping.get(userid, None)
+    return User.find_by_id(userid)

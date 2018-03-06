@@ -10,8 +10,10 @@ from dir
 
 ssh -i /c/Users/bmt/.ssh/aws-key.pem  ubuntu@ec2-54-190-59-140.us-west-2.compute.amazonaws.com
 
-in directory /home/ubuntu/udemy_rest_api_working/ch4/code
+in directory
+cd /home/ubuntu/udemy_rest_api_working/ch4/code
 source ../venv/bin/activate
+python app.py
 
 pip install Flask
 pip install Flask-RESTful
@@ -20,4 +22,5 @@ pip install Flask-JWT
 
 
 
-JWTseyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MTk5NjMyMzksImlhdCI6MTUxOTk2MjkzOSwibmJmIjoxNTE5OTYyOTM5LCJpZGVudGl0eSI6MX0.Q9122dW8ty7elAppGMpiGq6Uqt1Ymc6DXteodq_MviI
+lect 66 @ 15:16 broken, get error
+Failed to decode JSON object: Expecting value: line 2 column 14 (char 15)
