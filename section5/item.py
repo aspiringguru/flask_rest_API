@@ -54,13 +54,14 @@ class Item(Resource):
         #NB: all return have to be json.
         return item, 201
 
-    @jwt_required() #future implementation of login to delete
+    #@jwt_required() #future implementation of login to delete
     def delete(self, name):
-        #todo: upgrade to return err msg if item does not exist to delete. curr version does not check
-        global items
-        #tells this method the items generated is the global var items
-        items = list(filter(lambda x: x['name'] != name, items))
-        #overwrite list items with list where name has been removed.
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        query = "DELETE FROM items WHERE name = ?"
+        results = cursor.execute(query, (name,))
+        connection.commit()
+        connection.close()
         return {'message': 'item deleted'}
 
     @jwt_required() #future implementation of login to put
