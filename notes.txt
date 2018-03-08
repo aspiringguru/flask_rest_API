@@ -4,13 +4,13 @@ PS D:\2017_working\udemy_flask_rest_course\working\section4> .\venv\Scripts\acti
 
 https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/
 
+https://github.com/aspiringguru/flask_rest_API
+
 PS D:\DProgramFiles\python3Anaconda\envs\venv\Lib\venv\scripts\nt>
 
-from dir
+
 
 ssh -i /c/Users/bmt/.ssh/aws-key.pem  ubuntu@ec2-54-190-59-140.us-west-2.compute.amazonaws.com
-
-in directory
 cd /home/ubuntu/udemy_rest_api_working/ch4/code
 source ../venv/bin/activate
 python app.py
@@ -18,9 +18,3 @@ python app.py
 pip install Flask
 pip install Flask-RESTful
 pip install Flask-JWT
-
-
-
-
-lect 66 @ 15:16 broken, get error
-Failed to decode JSON object: Expecting value: line 2 column 14 (char 15)

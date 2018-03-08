@@ -1,7 +1,7 @@
 from flask import Flask #dont need request any more
-from flask_restful import Resource #kepy Resource for route to load root
-from flask_restful import Api, reqparse
-from flask_jwt import JWT, jwt_required
+from flask_restful import Resource #keep Resource for route to load root
+from flask_restful import Api#, reqparse
+from flask_jwt import JWT
 from security import authenticate, identity
 from user import UserRegister
 from item import Item, ItemList
@@ -11,7 +11,7 @@ from item import Item, ItemList
 
 
 app = Flask(__name__)
-app.config['PROPAGATE_EXCEPTIONS'] = True # To allow flask propagating exception even if debug is set to false on app
+#app.config['PROPAGATE_EXCEPTIONS'] = True # To allow flask propagating exception even if debug is set to false on app
 app.secret_key = 'jose'
 #nb: secret key should be imported from a file excluded from the git repo
 api = Api(app)

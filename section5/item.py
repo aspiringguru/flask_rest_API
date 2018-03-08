@@ -1,6 +1,5 @@
 import sqlite3
-from flask_restful import Resource
-from flask_restful import Api, reqparse
+from flask_restful import Resource, reqparse
 from flask_jwt import jwt_required
 
 
@@ -18,15 +17,12 @@ class Item(Resource):
         cursor = connection.cursor()
         query = "SELECT * FROM items WHERE name=?"
         results = cursor.execute(query, (name,))
-        row = result.fetchone()
+        row = results.fetchone()
         #NB: fetchone returns one row only
         connection.close()
         if row:
             return {'item':{'name':row[0], 'price':row[1]}} #, 200
         return {'message':'item not found'}, 404
-
-        #item = next(filter(lambda x: x['name'] == name, items), None)
-        #return {"item": item}, 200 if item else 404
 
     #@jwt_required() #future implementation of login to post
     def post(self, name):
