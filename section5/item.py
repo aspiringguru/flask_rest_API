@@ -13,6 +13,7 @@ class Item(Resource):
 
     @jwt_required() #when this route is in front of a method definition, the method requires authorisation to execute
     def get(self, name):
+        #todo: surround next line in try except block
         item = self.find_by_name(name)
         if item:
             return item
@@ -33,26 +34,25 @@ class Item(Resource):
 
     #@jwt_required() #future implementation of login to post
     def post(self, name):
-        #now impose unique name on adding/creating new item.
-        #if self.find_by_name(name): #can still call by self, or by class as below
         if Item.find_by_name(name):
-            #checks if an item already exists.
             return {'message':"An item with name '{}' already exists".format(name)}, 400
-        #by using an error first approach, the code below is not executed if error condition found.
-
         data = Item.parser.parse_args()
-        #data = request.get_json() #ssd
-        #NB: this requires the content-type to be set to application/json and body to be json in the post request, o/wise error.
         item = {'name': name, 'price': data['price']}
-        #items.append(item)  #obselete since storing in database not ItemList
+        try:
+            self.insert(item)
+        except:
+            return {"message", "An error occurred inserting the item."}, 500 #internal server errror
+        return item, 201
+
+    @classmethod
+    def insert(cls, item):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
         query = "INSERT INTO items VALUES (?, ?)"
         results = cursor.execute(query, (item['name'], item['price']))
         connection.commit()
         connection.close()
-        #NB: all return have to be json.
-        return item, 201
+
 
     #@jwt_required() #future implementation of login to delete
     def delete(self, name):
@@ -71,14 +71,32 @@ class Item(Resource):
         #print (data['another']) #results in keyerror when tested in postman
 
         #data = request.get_json()
-        item = next(filter(lambda x: x['name'] == name, items), None)
+        #item = next(filter(lambda x: x['name'] == name, items), None)
+        item = self.find_by_name(name)
+        updated_item = {'name':name, 'price': data['price']}
         if item is None:
-            item = {'name':name, 'price': data['price']}
-            items.append(item)
+            #item does not exist, create new item
+            try:
+                self.insert(updated_item)
+            except:
+                return {"message": "An error occurred inserting the item."}, 500
         else:
-            item.update(data)
+            #item does exist, do an update.
+            try:
+                self.update(updated_item)
+            except:
+                return {"message": "An error occurred updating the item."}, 500
             #nb: data might contain a new name, bad, need to protect against this later
-        return item
+        return updated_item
+
+    @classmethod
+    def update(cls, item):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        query = "UPDATE items SET price = ? WHERE name=?"
+        results = cursor.execute(query, (item['price'], item['name']))
+        connection.commit()
+        connection.close()
 
 
 
