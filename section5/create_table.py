@@ -16,9 +16,10 @@ cursor.execute(create_table)
 create_table = "CREATE TABLE IF NOT EXISTS items (name text, price real)"
 cursor.execute(create_table)
 
-cursor.execute("INSERT INTO items VALUES ('test', 10.99)")
-cursor.execute("INSERT INTO items VALUES ('chair', 15.55)")
-cursor.execute("INSERT INTO items VALUES ('table', 21.21)")
+#don't need to create data anymore since creating data from the app.
+#cursor.execute("INSERT INTO items VALUES ('test', 10.99)")
+#cursor.execute("INSERT INTO items VALUES ('chair', 15.55)")
+#cursor.execute("INSERT INTO items VALUES ('table', 21.21)")
 
 
 connection.commit()
