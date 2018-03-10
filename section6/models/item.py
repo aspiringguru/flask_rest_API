@@ -29,6 +29,7 @@ class ItemModel:
         #nb: was previously classmethod, converted to object method as not returning anything
         #print("\n\nmodels.item: insert : self.name='{}', self.price='{}'\n\n".format(self.name, self.price), file=sys.stderr)
         #print("\n\nmodels.item: insert : self.name='{}', self.price='{}'\n\n".format(self.name, self.price), file=sys.stdout)
+        #return {"message":"item.name='{}', item.price={}".format(item.name, item.price) }
         try:
             connection = sqlite3.connect('data.db')
             cursor = connection.cursor()

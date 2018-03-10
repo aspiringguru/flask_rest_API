@@ -27,11 +27,15 @@ class Item(Resource):
             return {'message':"An item with name '{}' already exists".format(name)}, 400
         data = Item.parser.parse_args()
         item = ItemModel(name, data['price'])
-        #return {'message':"recourses.item.py, post(post(self, '{}' ) callled. data['price']='{}'".format(name, data['price'])}
+        #return {'message':"recourses.item.py, post(post(self, '{}' ) callled. data['price']='{}'".format(name, data['price']),
+        #        "message2":"type(item)'{}'".format(type(item)),
+        #        "message3":"item.name='{}', item.price={}".format(item.name, item.price)
+        #}
+        #above shows we are getting type models.item.ItemModel with values for item.name and item.price
         try:
             item.insert(item)
         except:
-            return {"message": "An error occurred inserting the item."}, 500 #internal server errror
+            return {"message": "An error occurred inserting the item.\nitem.json()={}".format(item.json())}, 500 #internal server errror
         return item.json(), 201
 
 
