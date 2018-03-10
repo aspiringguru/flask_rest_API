@@ -37,7 +37,8 @@ class Item(Resource):
         except:
             return {"message": "An error occurred inserting the item.",
                     "message2": "item.json()={}".format(item.json()),
-                    "message3": "type(item)={}".format(type(item))}, 500 #internal server errror
+                    "message3": "type(item)={}".format(type(item)),
+                    "message4": "item.name={}, item.price={}.format(item.name, item.price)"}, 500 #internal server errror
         return item.json(), 201
 
 

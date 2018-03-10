@@ -21,14 +21,14 @@ class ItemModel:
         connection.close()
         if row:
             #return {'item':{'name':row[0], 'price':row[1]}} #, 200
-            #return cls(row[0], row[1])
             #now returns ItemModel object instead of json
+            #return cls(row[0], row[1])
             return cls(*row) #*row is argument unpacking shorthand
 
     def insert(self):
         #nb: was previously classmethod, converted to object method as not returning anything
-        print("\n\nmodels.item: insert : self.name='{}', self.price='{}'\n\n".format(self.name, self.price), file=sys.stderr)
-        print("\n\nmodels.item: insert : self.name='{}', self.price='{}'\n\n".format(self.name, self.price), file=sys.stdout)
+        #print("\n\nmodels.item: insert : self.name='{}', self.price='{}'\n\n".format(self.name, self.price), file=sys.stderr)
+        #print("\n\nmodels.item: insert : self.name='{}', self.price='{}'\n\n".format(self.name, self.price), file=sys.stdout)
         #return {"message":"item.name='{}', item.price={}".format(item.name, item.price) }
         try:
             connection = sqlite3.connect('data.db')
