@@ -2,6 +2,7 @@ import sqlite3
 from flask_restful import Resource, reqparse
 from flask_jwt import jwt_required
 from models.item import ItemModel
+import traceback
 
 class Item(Resource):
     parser = reqparse.RequestParser()
@@ -35,6 +36,7 @@ class Item(Resource):
         try:
             item.insert()
         except:
+            traceback.print_exc()
             return {"message": "An error occurred inserting the item.",
                     "message2": "item.json()={}".format(item.json()),
                     "message3": "type(item)={}".format(type(item)),
