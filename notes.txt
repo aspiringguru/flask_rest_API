@@ -10,7 +10,7 @@ https://github.com/schoolofcode-me/rest-api-sections/tree/master/section6
 
 PS D:\DProgramFiles\python3Anaconda\envs\venv\Lib\venv\scripts\nt>
 
-
+http://ec2-54-190-59-140.us-west-2.compute.amazonaws.com:5000
 
 ssh -i /c/Users/bmt/.ssh/aws-key.pem  ubuntu@ec2-54-190-59-140.us-west-2.compute.amazonaws.com
 cd /home/ubuntu/udemy_rest_api_working/ch4/code

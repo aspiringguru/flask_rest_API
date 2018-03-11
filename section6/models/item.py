@@ -1,8 +1,15 @@
 import sqlite3
+from db import db
 import traceback
 
-class ItemModel:
+class ItemModel(db.Model):
+    __tablename__ = "items"
+    id = db.column(db.Integer, primary_key = True)
+    username = db.Column(db.String(80))
+    price = db.Column(db.Float(precision=2))
+
     def __init__(self, name, price):
+        #NB: name and price initialzed by the code above. id value exists but not passed to self.id here. L84 @ 10:20
         self.name = name
         self.price = price
 
@@ -27,9 +34,6 @@ class ItemModel:
 
     def insert(self):
         #nb: was previously classmethod, converted to object method as not returning anything
-        print("\n\nmodels.item: insert : self.name='{}', self.price='{}'\n\n".format(self.name, self.price), file=sys.stderr)
-        print("\n\nmodels.item: insert : self.name='{}', self.price='{}'\n\n".format(self.name, self.price), file=sys.stdout)
-        #return {"message":"item.name='{}', item.price={}".format(item.name, item.price) }
         try:
             connection = sqlite3.connect('data.db')
             cursor = connection.cursor()
