@@ -33,7 +33,7 @@ class Item(Resource):
         #}
         #above shows we are getting type models.item.ItemModel with values for item.name and item.price
         try:
-            item.insert(item)
+            item.insert()
         except:
             return {"message": "An error occurred inserting the item.",
                     "message2": "item.json()={}".format(item.json()),
