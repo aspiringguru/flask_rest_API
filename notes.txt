@@ -22,3 +22,13 @@ pip install Flask
 pip install Flask-JWT
 pip install Flask-RESTful
 pip install Flask-SQLAlchemy
+
+
+
+notes
+L85
+0 to 6:12 rework models.item.find_by_name to use SQLAlchemy
+8:09  rework models.item.insert and rename as rework models.item.save_to_db
+9:50  rework resources.item.Item.delete
+11:22 rework resource.item.Item.put
+12:xx add a..config info for database filter_by

@@ -1,4 +1,3 @@
-import sqlite3
 from flask_restful import Resource, reqparse
 from flask_jwt import jwt_required
 from models.item import ItemModel
@@ -47,22 +46,32 @@ class Item(Resource):
 
     #@jwt_required() #future implementation of login to delete
     def delete(self, name):
-        item = ItemModel.find_by_name(name)
-        #error fixed in L85 @ 14:31
-        if item:
-            item.delete_from_db()
-        return {"message": "item deleted."}
+        try:
+            item = ItemModel.find_by_name(name)
+            #error fixed in L85 @ 14:31
+            if item:
+                item.delete_from_db()
+            return {"message": "item deleted."}
+        except:
+            traceback.print_exc()
+            return{"message": "error trapped in resources.item.ITem.delete",
+                    "messag2": traceback.print_exc()}
+
 
     @jwt_required() #future implementation of login to put
     def put(self, name):
-        data = Item.parser.parse_args()
-        item = ItemModel.find_by_name(name)
-        if item is None:
-            item = ItemModel(name, data['price'])
-        else:
-            item.price = data['price']
-        return updated_item.json()
-
+        try:
+            data = Item.parser.parse_args()
+            item = ItemModel.find_by_name(name)
+            if item is None:
+                item = ItemModel(name, data['price'])
+            else:
+                item.price = data['price']
+            item.save_to_db()
+            return item.json()
+        except:
+            traceback.print_exc()
+            return {"message":"error in resource.item.Item.put"}
 
 class ItemList(Resource):
     def get(self):

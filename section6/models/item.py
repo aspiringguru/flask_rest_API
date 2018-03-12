@@ -17,7 +17,10 @@ class ItemModel(db.Model):
 
     @classmethod
     def find_by_name(cls, name):
-        return cls.query.filter_by(name=name).first()
+        try:
+            return cls.query.filter_by(name=name).first()
+        except:
+            traceback.print_exc()
         #name of table in generated SQL is given by __tablename__
         #SELECT * from items where name=name LIMIT 1  (returns first row only)
         #http://docs.sqlalchemy.org/en/latest/orm/query.html
