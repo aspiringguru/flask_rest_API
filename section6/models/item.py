@@ -1,5 +1,6 @@
 from db import db
 import traceback
+import sys
 
 class ItemModel(db.Model):
     __tablename__ = "items"
@@ -17,10 +18,12 @@ class ItemModel(db.Model):
 
     @classmethod
     def find_by_name(cls, name):
+        print('find_by_name:,name={}'.format(name), file=sys.stdout)
         try:
             return cls.query.filter_by(name=name).first()
         except:
             traceback.print_exc()
+            return {"message":"error in models.item.ItemModel.find_by_name."}
         #name of table in generated SQL is given by __tablename__
         #SELECT * from items where name=name LIMIT 1  (returns first row only)
         #http://docs.sqlalchemy.org/en/latest/orm/query.html

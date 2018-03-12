@@ -1,6 +1,6 @@
 import sqlite3
 from db import db
-
+ 
 class UserModel(object):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key = True)

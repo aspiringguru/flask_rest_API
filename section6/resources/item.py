@@ -16,16 +16,20 @@ class Item(Resource):
     @jwt_required() #when this route is in front of a method definition, the method requires authorisation to execute
     def get(self, name):
         #todo: surround next line in try except block
-        item = ItemModel.find_by_name(name)
-        if item:
-            return item.json()
-        return {'message':'item not found'}, 404
+        try:
+            item = ItemModel.find_by_name(name)
+            if item:
+                return item
+            return {'message':'item not found'}, 404
+        except:
+            traceback.print_exc()
+            return {'message':'error in resources.item.Item.get({})'.format(name)}
 
 
     #@jwt_required() #future implementation of login to post
-    def post(self, name):
+    def post(self, id, name):
         #return {'message':"recourses.item.py, post(post(self, '{}' ) callled.".format(name)}
-        if ItemModel.find_by_name(name):
+        if ItemModel.find_by_name(id, name):
             return {'message':"An item with name '{}' already exists".format(name)}, 400
         data = Item.parser.parse_args()
         item = ItemModel(name, data['price'])
@@ -82,6 +86,7 @@ class ItemList(Resource):
         results = cursor.execute(query)
         items = []
         for result in results:
+            #items.append({'name': result[0], 'price':result[1]})
             items.append({'name': result[0], 'price':result[1]})
         connection.close()
         return {"items": items}

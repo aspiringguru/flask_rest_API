@@ -2,7 +2,7 @@ from flask import Flask #dont need request any more
 #from flask_restful import Resource #keep Resource for route to load root
 from flask_restful import Api#, reqparse
 from flask_jwt import JWT
-
+ 
 from security import authenticate, identity
 from resources.user import UserRegister
 from resources.item import Item, ItemList
