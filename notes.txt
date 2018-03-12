@@ -24,6 +24,12 @@ pip install Flask-RESTful
 pip install Flask-SQLAlchemy
 
 
+api.add_resource(ItemList, "/items")
+
+/item/shelves >
+api.add_resource(Item, "/item/<string:name>") >
+GET > resources.item.py > Item.get(self, name)
+
 
 notes
 L85
