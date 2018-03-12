@@ -33,7 +33,7 @@ class ItemModel(db.Model):
             db.session.add(self)
             db.session.commit()
         except:
-            print('self'+self, file=sys.stderr)
+            #print('self'+self, file=sys.stderr)
             traceback.print_exc()
 
 
