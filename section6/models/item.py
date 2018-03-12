@@ -1,10 +1,9 @@
-import sqlite3
 from db import db
 import traceback
 
 class ItemModel(db.Model):
     __tablename__ = "items"
-    id = db.column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(80))
     price = db.Column(db.Float(precision=2))
 
@@ -18,37 +17,23 @@ class ItemModel(db.Model):
 
     @classmethod
     def find_by_name(cls, name):
-        #keeping this as a class method because it returns an object.
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        query = "SELECT * FROM items WHERE name=?"
-        results = cursor.execute(query, (name,))
-        row = results.fetchone()
-        #NB: fetchone returns one row only
-        connection.close()
-        if row:
-            #return {'item':{'name':row[0], 'price':row[1]}} #, 200
-            #now returns ItemModel object instead of json
-            #return cls(row[0], row[1])
-            return cls(*row) #*row is argument unpacking shorthand
+        return cls.query.filter_by(name=name).first()
+        #name of table in generated SQL is given by __tablename__
+        #SELECT * from items where name=name LIMIT 1  (returns first row only)
+        #http://docs.sqlalchemy.org/en/latest/orm/query.html
+        #nb: can do cls.query.filter_by(name=name).filter_by(id=1)
+        #or can do cls.query.filter_by(name=name, id=1)
 
-    def insert(self):
-        #nb: was previously classmethod, converted to object method as not returning anything
+    def save_to_db(self):
+        #nb removed try except + error output
         try:
-            connection = sqlite3.connect('data.db')
-            cursor = connection.cursor()
-            query = "INSERT INTO items VALUES (?, ?)"
-            results = cursor.execute(query, (self.name, self.price))
-            connection.commit()
-            connection.close()
+            db.session.add(self)
+            db.session.commit()
         except:
+            print('self'+self, file=sys.stderr)
             traceback.print_exc()
 
-    def update(self):
-        #nb: was previously classmethod, converted to object method as not returning anything
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        query = "UPDATE items SET price = ? WHERE name=?"
-        results = cursor.execute(query, (self.price, self.name))
-        connection.commit()
-        connection.close()
+
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()

@@ -35,7 +35,7 @@ class Item(Resource):
         #}
         #above shows we are getting type models.item.ItemModel with values for item.name and item.price
         try:
-            item.insert()
+            item.save_to_db()
         except:
             traceback.print_exc()
             return {"message": "An error occurred inserting the item.",
@@ -47,39 +47,20 @@ class Item(Resource):
 
     #@jwt_required() #future implementation of login to delete
     def delete(self, name):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        query = "DELETE FROM items WHERE name = ?"
-        results = cursor.execute(query, (name,))
-        connection.commit()
-        connection.close()
-        return {'message': 'item deleted'}
+        item = ItemModel.find_by_name(name)
+        #error fixed in L85 @ 14:31
+        if item:
+            item.delete_from_db()
+        return {"message": "item deleted."}
 
     @jwt_required() #future implementation of login to put
     def put(self, name):
-        #todo: replicate this in other methods.
         data = Item.parser.parse_args()
-        #print (data['another']) #results in keyerror when tested in postman
-
-        #data = request.get_json()
-        #item = next(filter(lambda x: x['name'] == name, items), None)
         item = ItemModel.find_by_name(name)
-        updated_item = ItemModel(name, data['price'])
         if item is None:
-            #item does not exist, create new item
-            try:
-                #ItemModel.insert(updated_item)
-                updated_item.insert()
-            except:
-                return {"message": "An error occurred inserting the item."}, 500
+            item = ItemModel(name, data['price'])
         else:
-            #item does exist, do an update.
-            try:
-                #ItemModel.update(updated_item)
-                updated_item.update()
-            except:
-                return {"message": "An error occurred updating the item."}, 500
-            #nb: data might contain a new name, bad, need to protect against this later
+            item.price = data['price']
         return updated_item.json()
 
 

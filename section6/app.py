@@ -9,9 +9,10 @@ from resources.item import Item, ItemList
 #https://flask-restful.readthedocs.io/en/0.3.5/reqparse.html
 app = Flask(__name__)
 #app.config['PROPAGATE_EXCEPTIONS'] = True # To allow flask propagating exception even if debug is set to false on app
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db' #assumes data.db is in same directory as app.py when executed.??
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #nb: this turns off the flask sqlalchemy modification tracker, not the sqlalchemy modification tracker.
-#http://flask-sqlalchemy.pocoo.org/2.3/config/
+#http://flask-sqlalchemy.pocoo.org/2.3/config/  refer to this for app.config['VARIABLES'] above
 app.secret_key = 'jose'
 #nb: secret key should be imported from a file excluded from the git repo
 api = Api(app)

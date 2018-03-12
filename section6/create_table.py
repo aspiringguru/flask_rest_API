@@ -13,7 +13,8 @@ create_table = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, userna
 cursor.execute(create_table)
 
 
-create_table = "CREATE TABLE IF NOT EXISTS items (name text, price real)"
+create_table = "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY, name text, price real)"
+#id INTEGER PRIMARY KEY added L85 @ 1:52
 cursor.execute(create_table)
 
 #don't need to create data anymore since creating data from the app.
