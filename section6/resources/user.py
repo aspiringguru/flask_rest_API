@@ -25,7 +25,10 @@ class UserRegister(Resource):
             print("data['username']= {}, data['password']={}".format(data['username'], data['password']), file=sys.stderr)
 
             if UserModel.find_by_username(data['username']):
+                print("UserModel.find_by_username(data['username']) is not null.", file=sys.stderr)
                 return {"message": "User with that username already exists."}, 400
+            else:
+                print("UserModel.find_by_username(data['username']) is null.", file=sys.stderr)
 
             #user = UserModel(data['username'], data['password'])
             user = UserModel(**data)
