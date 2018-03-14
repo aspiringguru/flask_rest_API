@@ -1,8 +1,16 @@
 import sqlite3
+from db import db
 
 #methods here are not called directly by api, called internally by resource
 
-class ItemModel:
+class ItemModel(db.Model):
+    #http://flask-sqlalchemy.pocoo.org/2.3/models/
+    __tablename__ = 'items'
+    id = db.Column(db.Integer, primary_key=True)
+    #NB: id column added in L84 @ 7:20
+    name = db.Column(db.String(80))#assigns max number of characters
+    price = db.Column(db.Float(precision=2))
+
     def __init__(self, name, price):
         self.name = name
         self.price = price
@@ -12,6 +20,7 @@ class ItemModel:
 
     @classmethod
     def find_by_name(cls, name):
+        #not using SQLAlchemy here yet. direct calls on sqlite3
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 

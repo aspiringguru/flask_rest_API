@@ -12,7 +12,7 @@ class Item(Resource):
         required=True,
         help="This field cannot be left blank!"
     )
- 
+
     @jwt_required()
     def get(self, name):
         item = ItemModel.find_by_name(name)
@@ -41,13 +41,19 @@ class Item(Resource):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
-        query = "DELETE FROM {table} WHERE name=?".format(table=self.TABLE_NAME)
-        cursor.execute(query, (name,))
-
+        query = "SELECT * FROM {table} WHERE name=?".format(table=self.TABLE_NAME)
+        result = cursor.execute(query, (name,))
+        row = result.fetchone()
+        if row:
+            query = "DELETE FROM {table} WHERE name=?".format(table=self.TABLE_NAME)
+            cursor.execute(query, (name,))
+            return_msg = {'message': 'Item deleted'}
+        else:
+            return_msg = {'message': 'Item not found'}
         connection.commit()
         connection.close()
 
-        return {'message': 'Item deleted'}
+        return return_msg
 
     @jwt_required()
     def put(self, name):
