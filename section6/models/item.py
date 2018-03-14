@@ -1,5 +1,5 @@
-import sqlite3
 from db import db
+import sys
 
 #methods here are not called directly by api, called internally by resource
 
@@ -20,36 +20,20 @@ class ItemModel(db.Model):
 
     @classmethod
     def find_by_name(cls, name):
-        #not using SQLAlchemy here yet. direct calls on sqlite3
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
+        #SQLAlchemy.Model.query
+        print('models.item.ItemModel.find_by_name({}) called.'.format(name), file=sys.stderr)
+        return cls.query.filter_by(name=name)
+        #return cls.query.filter_by(name=name).first()
+        #return cls.query.filter_by(name=name).one()
+        #SELECT * FROM items WHERE name=name LIMIT 1
 
-        query = "SELECT * FROM items WHERE name=?"
-        result = cursor.execute(query, (name,))
-        row = result.fetchone()
-        connection.close()
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+        #db = SQLAlchemy, SQLAlchemy.session.add
+        #http://docs.sqlalchemy.org/en/latest/orm/session_api.html
+        #nb: this does insert and update.
 
-        if row:
-            #return {'item': {'name': row[0], 'price': row[1]}} old return json object
-            #return cls(row[0], row[1])#returning object of type ItemModel
-            return cls(*row)
-
-    def insert(self):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-
-        query = "INSERT INTO items VALUES(?, ?)"
-        cursor.execute(query, (self.name, self.price))
-
-        connection.commit()
-        connection.close()
-
-    def update(self):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-
-        query = "UPDATE items SET price=? WHERE name=?"
-        cursor.execute(query, (self.price, self.name))
-
-        connection.commit()
-        connection.close()
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
