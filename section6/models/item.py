@@ -22,8 +22,8 @@ class ItemModel(db.Model):
     def find_by_name(cls, name):
         #SQLAlchemy.Model.query
         print('models.item.ItemModel.find_by_name({}) called.'.format(name), file=sys.stderr)
-        return cls.query.filter_by(name=name)
-        #return cls.query.filter_by(name=name).first()
+        #return cls.query.filter_by(name=name)
+        return cls.query.filter_by(name=name).first()
         #return cls.query.filter_by(name=name).one()
         #SELECT * FROM items WHERE name=name LIMIT 1
 

@@ -16,7 +16,9 @@ class Item(Resource):
 
     @jwt_required()
     def get(self, name):
+        print('resources.item.Item.get({}) called.'.format(name), file=sys.stderr)
         item = ItemModel.find_by_name(name)
+        print('type({}) ={}.'.format(name, str(type(name))), file=sys.stderr)
         if item:
             return item.json()
         return {'message': 'Item not found'}, 404
@@ -39,11 +41,15 @@ class Item(Resource):
         return item.json(), 201
 
     def delete(self, name):
+        print('resources.item.Item.delete({}) called.'.format(name), file=sys.stderr)
         #NB: added functionality to advise user of error deleting non existing item.
         #added HTTP status codes.
-        item = Item.find_by_name(name)
+        item = ItemModel.find_by_name(name)
+        print('marker aa.', file=sys.stderr)
         if item:
+            print('item exists. type(item) = '+str(type(item)), file=sys.stderr)
             item.delete_from_db()
+            print('item.delete_from_db done.', file=sys.stderr)
             return {'message': 'Item deleted'}, 200
         else:
             return {'message': 'Item not found'}, 400
