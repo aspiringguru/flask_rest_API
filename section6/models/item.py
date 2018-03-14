@@ -10,10 +10,16 @@ class ItemModel(db.Model):
     #NB: id column added in L84 @ 7:20
     name = db.Column(db.String(80))#assigns max number of characters
     price = db.Column(db.Float(precision=2))
+    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
+    store = db.relationship('StoreModel')
+    #SQLAlchemy.Integer
+    #SQLAlchemy.ForeignKey
+    #SQLAlchemy.relationship
 
-    def __init__(self, name, price):
+    def __init__(self, name, price, store_id):
         self.name = name
         self.price = price
+        self.store_id = store_id
 
     def json(self):
         return {'name': self.name, 'price': self.price}
