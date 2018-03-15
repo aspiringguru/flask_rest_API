@@ -16,7 +16,7 @@ class StoreModel(db.Model):
     #http://docs.sqlalchemy.org/en/latest/orm/query.html ie. can use the .all() & other methods on this page.
     #nb: tradeoff between speed of creating store vs speed of calling the json method.
 
-    def __init__(self, name, price):
+    def __init__(self, name):
         self.name = name
 
     def json(self):
